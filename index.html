@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <title>Centro Médico Ñuñoa</title>
+  </head>
+  <body>
+    <div class="container">
+      <h3 class="center">Tabla de citas</h3>
+      <table class="striped indigo lighten-3">
+        <thead>
+          <tr>
+            <th>Área</th>
+            <th>Hora</th>
+            <th>Especialista</th>
+            <th>Paciente</th>
+            <th>RUT</th>
+            <th>Previsión</th>
+          </tr>
+        </thead>
+
+        <tbody id="tabla"></tbody>
+      </table>
+    </div>
+</br>
+</br>
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel">
+            <span class="indigo-text" id="card1"></span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel">
+            <span class="indigo-text" id="card2"></span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel">
+            <span class="indigo-text" id="card3"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const radiologia = [
+        {
+          hora: "11:00",
+          especialista: "IGNACIO SCHULZ",
+          paciente: "FRANCISCA ROJAS",
+          rut: "9878782-1",
+          prevision: "FONASA",
+        },
+        {
+          hora: "11:30",
+          especialista: "FEDERICO SUBERCASEAUX",
+          paciente: "PAMELA ESTRADA",
+          rut: "15345241-3",
+          prevision: "ISAPRE",
+        },
+        {
+          hora: "15:00",
+          especialista: "FERNANDO WURTHZ",
+          paciente: "ARMANDO LUNA",
+          rut: "16445345-9",
+          prevision: "ISAPRE",
+        },
+        {
+          hora: "15:30",
+          especialista: "ANA MARIA GODOY",
+          paciente: "MANUEL GODOY",
+          rut: "17666419-0",
+          prevision: "FONASA",
+        },
+        {
+          hora: "16:00",
+          especialista: "PATRICIA SUAZO",
+          paciente: "RAMON ULLOA",
+          rut: "14989389-K",
+          prevision: "FONASA",
+        },
+      ];
+      const traumatologia = [
+        {
+          hora: "08:00",
+          especialista: "MARIA PAZ ALTUZARRA",
+          paciente: "PAULA SANCHEZ",
+          rut: "15554774-5",
+          prevision: "FONASA",
+        },
+        {
+          hora: "10:00",
+          especialista: "RAUL ARAYA",
+          paciente: "ANGÉLICA NAVAS",
+          rut: "15444147-9",
+          prevision: "ISAPRE",
+        },
+        {
+          hora: "10:30",
+          especialista: "MARIA ARRIAGADA",
+          paciente: "ANA KLAPP",
+          rut: "17879423-9",
+          prevision: "ISAPRE",
+        },
+        {
+          hora: "11:00",
+          especialista: "ALEJANDRO BADILLA",
+          paciente: "FELIPE MARDONES",
+          rut: "1547423-6",
+          prevision: "ISAPRE",
+        },
+        {
+          hora: "11:30",
+          especialista: "CECILIA BUDNIK",
+          paciente: "DIEGO MARRE",
+          rut: "16554741-K",
+          prevision: "FONASA",
+        },
+        {
+          hora: "12:00",
+          especialista: "ARTURO CAVAGNARO",
+          paciente: "CECILIA MENDEZ",
+          rut: "9747535-8",
+          prevision: "ISAPRE",
+        },
+        {
+          hora: "12:30",
+          especialista: "ARTURO CAVAGNARO",
+          paciente: "MARCIAL SUAZO",
+          rut: "11254785-5",
+          prevision: "ISAPRE",
+        },
+      ];
+      const dental = [
+        {
+          hora: "08:30",
+          especialista: "RAQUEL VILLASECA",
+          paciente: "MARCELA RETAMAL",
+          rut: "11123425-6",
+          prevision: "ISAPRE",
+        },
+        {
+          hora: "11:00",
+          especialista: "EDUARDO VIÑUELA",
+          paciente: "ANGEL MUÑOZ",
+          rut: "9878789-2",
+          prevision: "ISAPRE",
+        },
+        {
+          hora: "11:30",
+          especialista: "FRANCISCO VON TEUBER",
+          paciente: "MARIO KAST",
+          rut: "7998789-5",
+          prevision: "FONASA",
+        },
+        {
+          hora: "13:00",
+          especialista: "SCARLETT WITTING",
+          paciente: "KARIN FERNANDEZ",
+          rut: "18887662-K",
+          prevision: "FONASA",
+        },
+        {
+          hora: "13:30",
+          especialista: "MARIA PIA ZAÑARTU",
+          paciente: "HUGO SANCHEZ",
+          rut: "17665461-4",
+          prevision: "FONASA",
+        },
+        {
+          hora: "14:00",
+          especialista: "ANDREA ZUÑIGA",
+          paciente: "ANA SEPULVEDA",
+          rut: "14441281-0",
+          prevision: "ISAPRE",
+        },
+      ];
+
+      let areas = [
+        { nombre: "Radiología", filas: radiologia },
+        { nombre: "Traumatología", filas: traumatologia },
+        { nombre: "Dental", filas: dental },
+      ];
+      let infoTabla = document.querySelector("#tabla");
+      let html = "";
+
+      function llenar_tabla(area) {
+        for (cita of area.filas) {
+          infoTabla.innerHTML += `
+                <tr>
+                    <td>${area.nombre}</td>
+                    <td>${cita.hora}</td>
+                    <td>${cita.especialista}</td>
+                    <td>${cita.paciente}</td>
+                    <td>${cita.rut}</td>
+                    <td>${cita.prevision}</td>
+                </tr>
+            `;
+        }
+      }
+
+      for (area of areas) {
+        llenar_tabla(area);
+      }
+
+      let texto1 = document.querySelector("#card1");
+      let texto2 = document.querySelector("#card2");
+      let texto3 = document.querySelector("#card3");
+
+      texto1.innerHTML = `<h5>${areas[0].nombre}</h5>
+        Primera atención: ${radiologia[0].paciente} - ${
+        radiologia[0].prevision
+      }. </br> Última atención: ${
+        radiologia[radiologia.length - 1].paciente
+      } - ${radiologia[radiologia.length - 1].prevision}`;
+
+      texto2.innerHTML = `<h5>${areas[1].nombre}</h5>
+        Primera atención: ${traumatologia[0].paciente} - ${
+        traumatologia[0].prevision
+      }. </br> Última atención: ${
+        traumatologia[traumatologia.length - 1].paciente
+      } - ${traumatologia[traumatologia.length - 1].prevision}`;
+
+      texto3.innerHTML = `<h5>${areas[2].nombre}</h5>
+        Primera atención: ${dental[0].paciente} - ${
+        dental[0].prevision
+      }. </br> Última atención: ${dental[dental.length - 1].paciente} - ${
+        dental[dental.length - 1].prevision
+      }`;
+
+      //   for (let area of areas) {
+      //     let nombre = area.nombre;
+      //     for (let atenciones of area.filas) {
+      //       html += `<tr> <td> ${nombre}</td>`;
+      //       for (props in atenciones) {
+      //         let valor = `<td>${atenciones[props]}</td>`;
+      //         html += valor;
+      //       }
+      //       html += `</tr>`;
+      //     }
+      //     infoTabla.innerHTML = html;
+      //   }
+    </script>
+  </body>
+</html>
